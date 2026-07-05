@@ -4,94 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dōmochi Club | Accesso</title>
-    
-    <!-- PWA 与 Manifest 关联设置 -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#FDEEDC">
-    <!-- 网页标签页图标 -->
     <link rel="icon" type="image/png" href="IMG_1321.png">
-    <!-- 苹果 iOS 桌面图标关联 -->
     <link rel="apple-touch-icon" href="IMG_1321.png">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --brand-primary: #DF4F53; 
-            --brand-secondary: #FDEEDC; 
-            --text-main: #4A3B32; 
-        }
+        :root { --brand-primary: #DF4F53; --brand-secondary: #FDEEDC; --text-main: #4A3B32; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: var(--brand-secondary); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-
-        .club-card { background: white; width: 100%; max-width: 420px; border-radius: 24px; padding: 35px 30px; box-shadow: 0 10px 30px rgba(223, 79, 83, 0.08); text-align: center; position: relative; overflow: hidden; }
-        
-        /* 优化后的 Logo 尺寸 (100px -> 75px)，更显精致 */
-        .logo-box { width: 75px; height: 75px; margin: 0 auto 15px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; }
+        .club-card { background: white; width: 100%; max-width: 420px; border-radius: 24px; padding: 40px 30px; box-shadow: 0 15px 35px rgba(223, 79, 83, 0.08); text-align: center; }
+        .logo-box { width: 75px; height: 75px; margin: 0 auto 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.06); overflow: hidden; }
         .logo-box img { width: 100%; height: 100%; object-fit: cover; }
-
         h1 { font-size: 1.6rem; font-weight: 900; color: var(--brand-primary); margin-bottom: 5px; }
-        p.subtitle { color: #888; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.4; }
-
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .input-field { width: 100%; padding: 15px 18px; border: 2px solid #eee; border-radius: 14px; font-size: 1rem; outline: none; transition: 0.3s; background: #fafafa; text-align: center; letter-spacing: 1px;}
+        p.subtitle { color: #888; font-size: 0.9rem; margin-bottom: 30px; }
+        .form-group { margin-bottom: 18px; text-align: left; }
+        .input-field { width: 100%; padding: 15px 18px; border: 2px solid #eee; border-radius: 14px; font-size: 1rem; outline: none; background: #fafafa; transition: 0.3s;}
         .input-field:focus { border-color: var(--brand-primary); background: white; }
-
-        .btn-submit { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 16px; border-radius: 14px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 20px rgba(223,79,83,0.25); transition: transform 0.2s; }
+        .btn-submit { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 18px; border-radius: 14px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 20px rgba(223,79,83,0.2); transition: 0.2s; margin-top: 10px; }
         .btn-submit:active { transform: scale(0.97); }
-
         .register-link-box { margin-top: 25px; border-top: 1px solid #f0f0f0; padding-top: 20px; }
-        .register-link-box p { font-size: 0.9rem; color: #888; margin-bottom: 5px; }
-        .register-link-box a { color: var(--brand-primary); font-weight: bold; text-decoration: none; font-size: 0.95rem; }
+        .register-link-box a { color: var(--brand-primary); font-weight: bold; text-decoration: none; }
     </style>
 </head>
 <body>
-
-    <div class="club-card" id="login-card">
-        <div class="logo-box">
-            <!-- 这里引用了你指定的图标 -->
-            <img src="IMG_1321.png" alt="Dōmochi Logo">
-        </div>
+    <div class="club-card">
+        <div class="logo-box"><img src="IMG_1321.png" alt="Logo"></div>
         <h1>Dōmochi Club</h1>
-        <p class="subtitle">Bentornato! Inserisci il tuo numero.</p>
+        <p class="subtitle">Accedi al tuo account</p>
         
         <div class="form-group">
-            <input type="tel" id="login-phone" class="input-field" placeholder="Es. 352*******">
+            <input type="email" id="login-email" class="input-field" placeholder="Email (电子邮箱)">
+        </div>
+        <div class="form-group">
+            <input type="password" id="login-password" class="input-field" placeholder="Password (密码)">
         </div>
         
-        <button class="btn-submit" onclick="checkLogin()">ACCEDI (登录)</button>
+        <button class="btn-submit" id="btn-login" onclick="checkLogin()">ACCEDI (登录)</button>
+        <p id="error-msg" style="color: red; font-size: 0.85rem; margin-top: 15px; display: none;"></p>
         
         <div class="register-link-box">
-            <p>Non sei ancora membro?</p>
+            <p style="font-size: 0.9rem; color: #888; margin-bottom: 5px;">Non sei ancora membro?</p>
             <a href="register.html">Registrati ora (去注册)</a>
         </div>
     </div>
 
-    <!-- Supabase 引入 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = "https://thulheyvwmfwfhhfjktk.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ";
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = supabase.createClient("https://thulheyvwmfwfhhfjktk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ");
+
+        // 密码加密函数
+        async function hashPassword(password) {
+            const msgBuffer = new TextEncoder().encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
 
         async function checkLogin() {
-            const phone = document.getElementById('login-phone').value.trim();
-            if (!phone) {
-                alert("Inserisci il tuo numero di telefono! (请输入手机号)");
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            const btn = document.getElementById('btn-login');
+            const errorEl = document.getElementById('error-msg');
+            
+            if (!email || !password) {
+                errorEl.innerText = "Inserisci email e password.";
+                errorEl.style.display = 'block';
                 return;
             }
 
-            const { data, error } = await supabaseClient
-                .from('domochi_members')
-                .select('*')
-                .eq('phone', phone)
-                .single();
+            btn.innerText = "Attendere..."; btn.disabled = true; errorEl.style.display = 'none';
 
-            if (data) {
-                // 登录成功，显示欢迎语及积分
-                alert(`Benvenuto ${data.name}! Hai attualmente ${data.points} punti.`);
-                // 之后你可以把这里改成跳转到会员中心页: window.location.href = "dashboard.html";
-            } else {
-                alert("Numero non trovato. Registrati prima! (号码不存在，请先去注册)");
+            try {
+                const hashedPassword = await hashPassword(password);
+                const { data, error } = await supabaseClient
+                    .from('domochi_members')
+                    .select('*')
+                    .eq('email', email)
+                    .eq('password', hashedPassword)
+                    .single();
+
+                if (error || !data) throw new Error("Email o password errati. (账号或密码错误)");
+
+                // 登录成功，将用户信息存入浏览器本地，跳转到主页
+                localStorage.setItem('domochi_user', JSON.stringify(data));
+                window.location.href = "dashboard.html";
+            } catch (err) {
+                errorEl.innerText = err.message;
+                errorEl.style.display = 'block';
+                btn.innerText = "ACCEDI (登录)"; btn.disabled = false;
             }
         }
     </script>
