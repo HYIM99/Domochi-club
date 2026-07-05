@@ -1,155 +1,27 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dōmochi Club | Entra nella Family</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- ⬇️ 新增的这一行：用于关联 manifest.json 以显示桌面图标 ⬇️ -->
-    <link rel="manifest" href="/manifest.json">
-    
-    <style>
-        :root {
-            --brand-primary: #DF4F53; 
-            --brand-secondary: #FDEEDC; 
-            --text-main: #4A3B32; 
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: var(--brand-secondary); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-
-        .club-card { background: white; width: 100%; max-width: 420px; border-radius: 24px; padding: 40px 30px; box-shadow: 0 15px 35px rgba(223, 79, 83, 0.1); text-align: center; position: relative; overflow: hidden; }
-        
-        .logo-box { width: 100px; height: 100px; margin: 0 auto 20px; border-radius: 50%; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; }
-        .logo-box img { width: 100%; height: 100%; object-fit: cover; }
-
-        h1 { font-size: 1.8rem; font-weight: 900; color: var(--brand-primary); margin-bottom: 5px; }
-        p.subtitle { color: #888; font-size: 0.95rem; margin-bottom: 30px; line-height: 1.4; }
-
-        .form-group { margin-bottom: 18px; text-align: left; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #555; margin-bottom: 8px; margin-left: 5px;}
-        .input-field { width: 100%; padding: 15px 18px; border: 2px solid #eee; border-radius: 14px; font-size: 1rem; outline: none; transition: 0.3s; background: #fafafa; }
-        .input-field:focus { border-color: var(--brand-primary); background: white; }
-
-        .btn-submit { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 18px; border-radius: 14px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 20px rgba(223,79,83,0.3); transition: transform 0.2s; margin-top: 10px; }
-        .btn-submit:active { transform: scale(0.97); }
-
-        /* 成功界面 */
-        .success-view { display: none; flex-direction: column; align-items: center; animation: slideUp 0.4s ease; }
-        .success-icon { font-size: 4rem; color: #52c41a; margin-bottom: 20px; }
-        
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* 隐私协议 */
-        .privacy-box { display: flex; align-items: flex-start; gap: 10px; margin-top: 20px; margin-bottom: 20px; text-align: left; }
-        .privacy-box input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--brand-primary); }
-        .privacy-box label { font-size: 0.8rem; color: #777; line-height: 1.4; }
-    </style>
-</head>
 <body>
-
-    <div class="club-card" id="register-card">
-        <div class="logo-box">
-            <img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg" alt="Dōmochi Logo">
-        </div>
+    <div class="club-card" id="login-card">
+        <div class="logo-box"><img src="https://i.ibb.co/gMcnX8yj/IMG-0668.jpg"></div>
         <h1>Dōmochi Club</h1>
-        <p class="subtitle">Registrati ora e accumula punti ad ogni acquisto! €1 = 1 Punto</p>
-
+        <p class="subtitle">Bentornato! Inserisci il tuo numero.</p>
+        
         <div class="form-group">
-            <label>Nome (怎么称呼您) *</label>
-            <input type="text" id="reg-name" class="input-field" placeholder="Es. Matteo">
+            <input type="tel" id="login-phone" class="input-field" placeholder="Es. 3520008111">
         </div>
-
-        <div class="form-group">
-            <label>Cellulare (手机号码) *</label>
-            <input type="tel" id="reg-phone" class="input-field" placeholder="Es. 3520008111">
+        
+        <button class="btn-submit" onclick="checkLogin()">ACCEDI (登录)</button>
+        
+        <div style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
+            <p style="font-size: 0.9rem; color: #888;">Non sei ancora membro?</p>
+            <a href="register.html" style="color: var(--brand-primary); font-weight: bold; text-decoration: none;">Registrati ora (去注册)</a>
         </div>
-
-        <div class="form-group">
-            <label>Email (电子邮箱) *</label>
-            <input type="email" id="reg-email" class="input-field" placeholder="Es. ciao@domochi.it">
-        </div>
-
-        <div class="privacy-box">
-            <input type="checkbox" id="reg-privacy">
-            <label for="reg-privacy">Acconsento al trattamento dei dati per ricevere sconti e promozioni (D.Lgs. 196/2003 e GDPR).</label>
-        </div>
-
-        <button class="btn-submit" id="btn-submit" onclick="submitRegistration()">ISCRIVITI ORA (立即加入)</button>
-        <p id="error-msg" style="color: red; font-size: 0.85rem; font-weight: bold; margin-top: 15px; display: none;"></p>
     </div>
-
-    <div class="club-card success-view" id="success-card">
-        <i class="fa-solid fa-circle-check success-icon"></i>
-        <h1>Benvenuto!</h1>
-        <p class="subtitle" style="margin-bottom:10px;">La tua registrazione è andata a buon fine.</p>
-        <div style="background:#fffcf8; border:2px dashed #faad14; padding:20px; border-radius:16px; margin:20px 0; width:100%;">
-            <div style="font-size:0.9rem; color:#888; font-weight:bold; margin-bottom:5px;">Il tuo saldo punti attuale:</div>
-            <div style="font-size:2.5rem; font-weight:900; color:#faad14;">0</div>
-        </div>
-        <p style="font-size:0.9rem; color:#666;">Mostra il tuo numero in cassa per accumulare punti o utilizzare i tuoi sconti!</p>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = "https://thulheyvwmfwfhhfjktk.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ";
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        async function submitRegistration() {
-            const name = document.getElementById('reg-name').value.trim();
-            const phone = document.getElementById('reg-phone').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const privacy = document.getElementById('reg-privacy').checked;
-            const errorEl = document.getElementById('error-msg');
-            const btn = document.getElementById('btn-submit');
-
-            // 表单验证
-            if (!name || !phone || !email) {
-                showError("Compila tutti i campi obbligatori! (请填写所有必填项)");
-                return;
-            }
-            if (!privacy) {
-                showError("Devi accettare la privacy policy! (请勾选同意隐私协议)");
-                return;
-            }
-
-            btn.innerText = "Attendere... (提交中)";
-            btn.disabled = true;
-            errorEl.style.display = 'none';
-
-            try {
-                // 插入数据
-                const { data, error } = await supabaseClient
-                    .from('domochi_members')
-                    .insert([{ phone: phone, name: name, email: email, points: 0 }])
-                    .select()
-                    .single();
-
-                if (error) {
-                    // 如果 Supabase 拦截了重复的手机号 (依赖你在 Supabase 设置的 Is Unique)
-                    if (error.code === '23505') { 
-                        throw new Error("Questo numero è già registrato! (该手机号已注册过)");
-                    }
-                    throw error;
-                }
-
-                // 注册成功，切换试图
-                document.getElementById('register-card').style.display = 'none';
-                document.getElementById('success-card').style.display = 'flex';
-
-            } catch (err) {
-                showError(err.message);
-                btn.innerText = "ISCRIVITI ORA (立即加入)";
-                btn.disabled = false;
-            }
-        }
-
-        function showError(msg) {
-            const el = document.getElementById('error-msg');
-            el.innerText = msg;
-            el.style.display = 'block';
+        async function checkLogin() {
+            const phone = document.getElementById('login-phone').value.trim();
+            // 这里连接你的 Supabase 查询积分逻辑
+            const { data } = await supabaseClient.from('domochi_members').select('*').eq('phone', phone).single();
+            if (data) { alert("Benvenuto " + data.name + "! Punti: " + data.points); } 
+            else { alert("Numero non trovato. (未找到会员，请先注册)"); }
         }
     </script>
 </body>
-</html>
