@@ -116,10 +116,10 @@
             const privacy = document.getElementById('reg-privacy').checked;
             const btn = document.getElementById('btn-submit');
 
-            if (!name || !phone || !email || !password || !enteredCode) return showError("Compila tutti i campi!");
+            if (!name || !phone || !email || !password) return showError("Compila tutti i campi!");
             if (password.length < 6) return showError("La password deve avere almeno 6 caratteri.");
             if (!privacy) return showError("Accetta la privacy policy.");
-            if (enteredCode !== generatedCode) return showError("Codice errato!");
+           // if (enteredCode !== generatedCode) return showError("Codice errato!");
 
             btn.innerText = "Attendere..."; btn.disabled = true;
 
