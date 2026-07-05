@@ -4,94 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dōmochi Club | Dashboard</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#FDEEDC">
+    <link rel="icon" type="image/png" href="IMG_1321.png">
+    <link rel="apple-touch-icon" href="IMG_1321.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 引入二维码生成库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        :root { --brand-primary: #DF4F53; --brand-secondary: #FDEEDC; --text-main: #2c2c2e; --bg-main: #f2f2f7; }
+        :root { 
+            --brand-primary: #DF4F53; 
+            --brand-secondary: #FDEEDC; 
+            --text-main: #4A3B32; 
+            --bg-main: #fcf8f2; 
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); padding-bottom: 80px; }
 
         /* 顶部欢迎区 */
         .header-area { padding: 30px 20px 20px; background: white; border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
-        .greeting { font-size: 1.8rem; font-weight: 800; }
-        .points-display { margin-top: 10px; font-size: 1rem; color: #888; }
-        .points-display span { font-size: 2rem; font-weight: 900; color: #faad14; }
+        .greeting { font-size: 1.8rem; font-weight: 800; color: var(--brand-primary); }
+        .points-display { margin-top: 10px; font-size: 1rem; color: #888; font-weight: 600; }
+        .points-display span { font-size: 2.2rem; font-weight: 900; color: #faad14; margin-left: 5px; }
 
-        /* 苹果钱包风格虚拟卡 */
+        /* Dōmochi 专属高质感红卡 */
         .wallet-card { 
-            background: linear-gradient(135deg, #2b2b2d, #1c1c1e); color: white;
-            margin: 25px 20px; border-radius: 20px; padding: 25px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2); position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #DF4F53, #c93b3f); /* 品牌红渐变 */
+            color: white;
+            margin: 25px 20px; border-radius: 24px; padding: 25px;
+            box-shadow: 0 15px 35px rgba(223, 79, 83, 0.25); position: relative; overflow: hidden;
         }
-        .wallet-card::before { content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%; }
-        .wallet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .wallet-header h2 { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; }
-        .wallet-header i { font-size: 1.5rem; color: var(--brand-primary); }
+        /* 卡片上的光影装饰 */
+        .wallet-card::after { content: ''; position: absolute; top: -50px; right: -30px; width: 140px; height: 140px; background: rgba(255,255,255,0.08); border-radius: 50%; }
+        .wallet-card::before { content: ''; position: absolute; bottom: -30px; left: -30px; width: 100px; height: 100px; background: rgba(255,255,255,0.06); border-radius: 50%; }
         
-        .qr-box { background: white; padding: 15px; border-radius: 16px; width: 180px; height: 180px; margin: 0 auto 25px; display: flex; justify-content: center; align-items: center; }
+        .wallet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; position: relative; z-index: 1; }
+        .wallet-header h2 { font-size: 1.4rem; font-weight: 900; letter-spacing: 1px; }
+        .logo-mini { width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; background: white;}
+        .logo-mini img { width: 100%; height: 100%; object-fit: cover; }
         
-        .wallet-footer { display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-        .info-block p { font-size: 0.7rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
-        .info-block h3 { font-size: 1.1rem; font-weight: 600; }
+        .qr-box { background: white; padding: 15px; border-radius: 20px; width: 180px; height: 180px; margin: 0 auto 25px; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(0,0,0,0.15); position: relative; z-index: 1;}
+        
+        /* 虚线分割线，营造实体票券感 */
+        .wallet-footer { display: flex; justify-content: space-between; border-top: 1px dashed rgba(255,255,255,0.5); padding-top: 18px; position: relative; z-index: 1; }
+        .info-block p { font-size: 0.75rem; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; font-weight: 600;}
+        .info-block h3 { font-size: 1.15rem; font-weight: 800; }
 
         /* 消费记录列表 */
-        .section-title { padding: 0 20px; margin: 20px 0 15px; font-size: 1.2rem; font-weight: 800; }
+        .section-title { padding: 0 20px; margin: 25px 0 15px; font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
         .history-list { padding: 0 20px; }
-        .history-item { background: white; padding: 15px 20px; border-radius: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-        .hi-left h4 { font-size: 1rem; margin-bottom: 4px; }
+        .history-item { background: white; padding: 18px 20px; border-radius: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .hi-left h4 { font-size: 1rem; margin-bottom: 4px; color: var(--text-main); font-weight: 700;}
         .hi-left p { font-size: 0.8rem; color: #888; }
-        .hi-right.earn { color: #34c759; font-weight: 800; font-size: 1.1rem; }
-        .hi-right.spend { color: var(--brand-primary); font-weight: 800; font-size: 1.1rem; }
+        .hi-right.earn { color: #34c759; font-weight: 900; font-size: 1.2rem; }
+        .hi-right.spend { color: var(--brand-primary); font-weight: 900; font-size: 1.2rem; }
 
         /* 底部导航栏 */
-        .tab-bar { position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 15px 0 25px; border-top: 1px solid #eee; z-index: 100; }
-        .tab-item { text-align: center; color: #888; text-decoration: none; font-size: 0.75rem; font-weight: 600; }
+        .tab-bar { position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 15px 0 25px; border-top: 1px solid #f0f0f0; z-index: 100; }
+        .tab-item { text-align: center; color: #aaa; text-decoration: none; font-size: 0.75rem; font-weight: 700; transition: 0.2s;}
         .tab-item.active { color: var(--brand-primary); }
-        .tab-item i { font-size: 1.3rem; margin-bottom: 5px; display: block; }
+        .tab-item i { font-size: 1.4rem; margin-bottom: 6px; display: block; }
     </style>
 </head>
 <body>
 
     <div class="header-area">
-        <div class="greeting">Ciao, <span id="user-name">Matteo</span>!</div>
-        <div class="points-display">Saldo Punti: <span id="user-points">1,250</span></div>
+        <div class="greeting">Bentornato, <span id="user-name">...</span>!</div>
+        <div class="points-display">Saldo Punti: <span id="user-points">0</span></div>
     </div>
 
-    <!-- 电子会员卡 -->
+    <!-- Dōmochi 专属电子会员卡 -->
     <div class="wallet-card">
         <div class="wallet-header">
             <h2>Dōmochi Club</h2>
-            <i class="fa-solid fa-circle-check"></i>
+            <div class="logo-mini">
+                <!-- 融入你的专属包子 Logo -->
+                <img src="IMG_1321.png" alt="Dōmochi">
+            </div>
         </div>
         <div class="qr-box" id="qrcode"></div>
         <div class="wallet-footer">
             <div class="info-block">
-                <p>Membro (会员姓名)</p>
-                <h3 id="card-name">Matteo Hu</h3>
+                <p>Membro (会员)</p>
+                <h3 id="card-name">...</h3>
             </div>
             <div class="info-block" style="text-align: right;">
-                <p>ID (专属编号)</p>
-                <h3 id="card-id">DM-00001</h3>
+                <p>ID (编号)</p>
+                <h3 id="card-id">...</h3>
             </div>
         </div>
     </div>
 
     <div class="section-title">Cronologia (积分明细)</div>
     <div class="history-list">
+        <!-- 这里先放两条假数据占位，后面我们写读取 Supabase 数据库的逻辑 -->
         <div class="history-item">
             <div class="hi-left">
-                <h4>Acquisto in negozio</h4>
-                <p>05 Luglio 2026, 14:30</p>
+                <h4>Regalo di Benvenuto</h4>
+                <p>Oggi</p>
             </div>
-            <div class="hi-right earn">+45</div>
-        </div>
-        <div class="history-item">
-            <div class="hi-left">
-                <h4>Riscatto Premio (Bao)</h4>
-                <p>02 Luglio 2026, 19:15</p>
-            </div>
-            <div class="hi-right spend">-200</div>
+            <div class="hi-right earn">+50</div>
         </div>
     </div>
 
@@ -99,20 +111,41 @@
     <div class="tab-bar">
         <a href="#" class="tab-item active"><i class="fa-solid fa-id-card"></i>Card</a>
         <a href="#" class="tab-item"><i class="fa-solid fa-gift"></i>Premi</a>
-        <a href="#" class="tab-item"><i class="fa-solid fa-user"></i>Profilo</a>
+        <a href="#" class="tab-item" onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i>Esci</a>
     </div>
 
     <script>
-        // 生成二维码逻辑，绑定唯一的会员 ID
-        const memberId = "DM-00001"; // 未来这里从数据库读取
-        new QRCode(document.getElementById("qrcode"), {
-            text: memberId,
-            width: 150,
-            height: 150,
-            colorDark : "#2b2b2d",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
+        // 自动读取刚才登录/注册时存在浏览器里的用户数据
+        const userDataString = localStorage.getItem('domochi_user');
+        
+        if (userDataString) {
+            const userData = JSON.parse(userDataString);
+            
+            // 将真实数据渲染到页面上
+            document.getElementById('user-name').innerText = userData.name;
+            document.getElementById('user-points').innerText = userData.points || 0;
+            document.getElementById('card-name').innerText = userData.name;
+            document.getElementById('card-id').innerText = userData.member_id;
+
+            // 生成二维码，使用深棕色代替纯黑色，让视觉更柔和高级，同时保持机器极速扫码识别率
+            new QRCode(document.getElementById("qrcode"), {
+                text: userData.member_id,
+                width: 150,
+                height: 150,
+                colorDark : "#4A3B32", 
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        } else {
+            // 如果没拿到数据（没登录），自动踢回登录页
+            window.location.href = "index.html";
+        }
+
+        // 退出登录逻辑
+        function logout() {
+            localStorage.removeItem('domochi_user');
+            window.location.href = "index.html";
+        }
     </script>
 </body>
 </html>
