@@ -1,12 +1,248 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dōmochi Club | Registrazione</title>
+    
+    <!-- PWA 与 Manifest 关联设置 -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#FDEEDC">
+    <!-- 网页标签页图标 -->
+    <link rel="icon" type="image/png" href="IMG_1321.png">
+    <!-- 苹果 iOS 桌面图标关联 -->
+    <link rel="apple-touch-icon" href="IMG_1321.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --brand-primary: #DF4F53; 
+            --brand-secondary: #FDEEDC; 
+            --text-main: #4A3B32; 
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--brand-secondary); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+
+        .club-card { background: white; width: 100%; max-width: 420px; border-radius: 24px; padding: 35px 30px; box-shadow: 0 10px 30px rgba(223, 79, 83, 0.08); text-align: center; position: relative; overflow: hidden; }
+        
+        /* 保持与首页一致的 75px 精致 Logo */
+        .logo-box { width: 75px; height: 75px; margin: 0 auto 15px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow: hidden; }
+        .logo-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        h1 { font-size: 1.6rem; font-weight: 900; color: var(--brand-primary); margin-bottom: 5px; }
+        p.subtitle { color: #888; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.4; }
+
+        .form-group { margin-bottom: 18px; text-align: left; position: relative; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #555; margin-bottom: 8px; margin-left: 5px;}
+        .input-field { width: 100%; padding: 15px 18px; border: 2px solid #eee; border-radius: 14px; font-size: 1rem; outline: none; transition: 0.3s; background: #fafafa; }
+        .input-field:focus { border-color: var(--brand-primary); background: white; }
+
+        .email-row { display: flex; gap: 10px; }
+        .btn-send-code { background: var(--text-main); color: white; border: none; border-radius: 12px; padding: 0 15px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: 0.2s; font-size: 0.85rem; }
+        .btn-send-code:disabled { background: #ccc; cursor: not-allowed; }
+
+        .btn-submit { width: 100%; background: var(--brand-primary); color: white; border: none; padding: 18px; border-radius: 14px; font-size: 1.1rem; font-weight: 800; cursor: pointer; box-shadow: 0 8px 20px rgba(223,79,83,0.3); transition: transform 0.2s; margin-top: 10px; }
+        .btn-submit:active { transform: scale(0.97); }
+
+        /* 成功界面 */
+        .success-view { display: none; flex-direction: column; align-items: center; animation: slideUp 0.4s ease; }
+        .success-icon { font-size: 4rem; color: #52c41a; margin-bottom: 20px; }
+        
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .privacy-box { display: flex; align-items: flex-start; gap: 10px; margin-top: 20px; margin-bottom: 20px; text-align: left; }
+        .privacy-box input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--brand-primary); }
+        .privacy-box label { font-size: 0.8rem; color: #777; line-height: 1.4; }
+
+        .login-link-box { margin-top: 25px; border-top: 1px solid #f0f0f0; padding-top: 20px; }
+        .login-link-box a { color: var(--text-main); font-weight: bold; text-decoration: none; font-size: 0.95rem; }
+    </style>
+</head>
 <body>
+
     <div class="club-card" id="register-card">
+        <div class="logo-box">
+            <img src="IMG_1321.png" alt="Dōmochi Logo">
+        </div>
         <h1>Registrazione</h1>
-        <!-- 这里放入你之前调试好的包含“邮箱验证码”逻辑的完整表单 -->
-        <!-- 保持 name, phone, email, code 输入框 -->
-        <button class="btn-submit" onclick="submitRegistration()">ISCRIVITI ORA</button>
-        <p style="margin-top:15px;"><a href="index.html">Torna al Login (返回登录)</a></p>
+        <p class="subtitle">Entra nella family e accumula punti!</p>
+
+        <div class="form-group">
+            <label>Nome (怎么称呼您) *</label>
+            <input type="text" id="reg-name" class="input-field" placeholder="Es. Matteo">
+        </div>
+
+        <div class="form-group">
+            <label>Cellulare (手机号码) *</label>
+            <input type="tel" id="reg-phone" class="input-field" placeholder="Es. 3520008111">
+        </div>
+
+        <div class="form-group">
+            <label>Email (电子邮箱) *</label>
+            <div class="email-row">
+                <input type="email" id="reg-email" class="input-field" placeholder="Es. ciao@domochi.it">
+                <button type="button" id="btn-send-code" class="btn-send-code" onclick="sendVerificationCode()">Invia Codice</button>
+            </div>
+        </div>
+
+        <div class="form-group" id="code-group" style="display: none; animation: slideUp 0.3s ease;">
+            <label>Codice di Verifica (邮箱收到的6位验证码) *</label>
+            <input type="text" id="reg-code" class="input-field" placeholder="123456" maxlength="6" style="letter-spacing: 5px; font-weight: bold; text-align: center; font-size: 1.2rem;">
+        </div>
+
+        <div class="privacy-box">
+            <input type="checkbox" id="reg-privacy">
+            <label for="reg-privacy">Acconsento al trattamento dei dati per ricevere sconti e promozioni (GDPR).</label>
+        </div>
+
+        <button class="btn-submit" id="btn-submit" onclick="submitRegistration()">ISCRIVITI ORA (立即加入)</button>
+        <p id="error-msg" style="color: red; font-size: 0.85rem; font-weight: bold; margin-top: 15px; display: none;"></p>
+
+        <div class="login-link-box">
+            <a href="index.html"><i class="fa-solid fa-arrow-left"></i> Torna al Login (返回登录)</a>
+        </div>
     </div>
+
+    <!-- 成功界面 -->
+    <div class="club-card success-view" id="success-card">
+        <i class="fa-solid fa-circle-check success-icon"></i>
+        <h1>Benvenuto!</h1>
+        <p class="subtitle" style="margin-bottom:10px;">La tua registrazione è andata a buon fine.</p>
+        <div style="background:#fffcf8; border:2px dashed #faad14; padding:20px; border-radius:16px; margin:20px 0; width:100%;">
+            <div style="font-size:0.9rem; color:#888; font-weight:bold; margin-bottom:5px;">Il tuo saldo punti attuale:</div>
+            <div style="font-size:2.5rem; font-weight:900; color:#faad14;">0</div>
+        </div>
+        <p style="font-size:0.9rem; color:#666; line-height: 1.5;">Mostra il tuo numero in cassa per accumulare punti o utilizzare i tuoi sconti!</p>
+        
+        <div class="login-link-box" style="width: 100%;">
+            <a href="index.html" style="color: var(--brand-primary);">Vai al Login (前往登录) <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // ... 此处放入你之前那段带邮箱验证功能的完整 JS 代码 ...
+        const SUPABASE_URL = "https://thulheyvwmfwfhhfjktk.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRodWxoZXl2d21md2ZoaGZqa3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5ODMyNzYsImV4cCI6MjA5ODU1OTI3Nn0.cX2-vmJ8TdXvUN-fjx6ufW1fUgklG4kZXsQhdwlHeTQ";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let generatedCode = ""; 
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        async function sendVerificationCode() {
+            const email = document.getElementById('reg-email').value.trim();
+            const errorEl = document.getElementById('error-msg');
+            const btnSend = document.getElementById('btn-send-code');
+
+            if (!isValidEmail(email)) {
+                showError("Inserisci un'email valida! (请输入有效的邮箱地址)");
+                return;
+            }
+            errorEl.style.display = 'none';
+
+            // 生成 6 位随机验证码
+            generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+            btnSend.disabled = true;
+            btnSend.innerText = "Invio...";
+
+            try {
+                // 调用后台 API
+                const response = await fetch('/api/send-code', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, code: generatedCode })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error?.message || "Errore invio email");
+                }
+
+                // 发送成功，显示输入框并倒计时
+                document.getElementById('code-group').style.display = 'block';
+                
+                let countdown = 60;
+                const timer = setInterval(() => {
+                    countdown--;
+                    btnSend.innerText = `Attendi ${countdown}s`;
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        btnSend.disabled = false;
+                        btnSend.innerText = "Re-invia";
+                    }
+                }, 1000);
+
+            } catch (err) {
+                showError("Errore invio: " + err.message);
+                btnSend.disabled = false;
+                btnSend.innerText = "Riprova";
+            }
+        }
+
+        async function submitRegistration() {
+            const name = document.getElementById('reg-name').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const enteredCode = document.getElementById('reg-code').value.trim();
+            const privacy = document.getElementById('reg-privacy').checked;
+            const errorEl = document.getElementById('error-msg');
+            const btn = document.getElementById('btn-submit');
+
+            // 基础校验
+            if (!name || !phone || !email || !enteredCode) {
+                showError("Compila tutti i campi obbligatori! (请填写所有必填项及验证码)");
+                return;
+            }
+            if (!privacy) {
+                showError("Devi accettare la privacy policy! (请勾选同意隐私协议)");
+                return;
+            }
+
+            // 验证码校验
+            if (enteredCode !== generatedCode) {
+                showError("Codice di verifica errato! (验证码错误)");
+                return;
+            }
+
+            btn.innerText = "Attendere... (提交中)";
+            btn.disabled = true;
+            errorEl.style.display = 'none';
+
+            try {
+                // 写入数据库
+                const { data, error } = await supabaseClient
+                    .from('domochi_members')
+                    .insert([{ phone: phone, name: name, email: email, points: 0 }])
+                    .select()
+                    .single();
+
+                if (error) {
+                    if (error.code === '23505') { 
+                        throw new Error("Questo numero è già registrato! (该手机号已注册过)");
+                    }
+                    throw error;
+                }
+
+                // 注册成功，切换试图
+                document.getElementById('register-card').style.display = 'none';
+                document.getElementById('success-card').style.display = 'flex';
+
+            } catch (err) {
+                showError(err.message);
+                btn.innerText = "ISCRIVITI ORA (立即加入)";
+                btn.disabled = false;
+            }
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('error-msg');
+            el.innerText = msg;
+            el.style.display = 'block';
+        }
     </script>
 </body>
+</html>
